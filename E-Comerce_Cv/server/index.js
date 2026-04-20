@@ -10,14 +10,14 @@ app.use(cors()) // --> Permito conexiones desde React
 
 app.get("/images", async (req, res) => {
     try {
-        const response = await fetch(
+        const response = await fetch( // --> Devuelve la respuesta HTTP (carta cerrada)
             "https://api.pexels.com/v1/search?query=roller skates&per_page=8",
         {headers: {
             Authorization: process.env.PEXELS_API_KEY
         }
     }
 )
-const data = await response.json()
+const data = await response.json() // --> Lee el contenido de la respuesta y lo parsea como JSON (puedo leer el contenido de la carta)
 res.json(data)
 }catch(error){
     res.status(500).json({ error: error.message })
