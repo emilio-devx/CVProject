@@ -1,10 +1,11 @@
 import "./App.css"
 import logo from "/Img/LogoE-comerce.png"
 import cartImg from "/Img/carritoImg.svg"
-import { FiSearch, FiMenu, FiShoppingCart, FiUser, FiLock } from "react-icons/fi"
+import { FiSearch, FiMenu, FiShoppingCart, FiUser, FiLock, FiChevronLeft, FiChevronRight   } from "react-icons/fi"
 import { FcGoogle } from "react-icons/fc";
 import { HiOutlineX } from "react-icons/hi";
 import { useState, useEffect } from "react"
+
 export function App () {
     const [accOpened, setAccOpened] = useState(false)
     const [cartOpened, setCartOpened] = useState(false)
@@ -15,29 +16,51 @@ export function App () {
     const email = "santiago123@gmail.com"
     const password = "123"
     const [users, setUsers] = useState({name:"Santiago"})
-    const [images, setImages] = useState([])
+    const [heroImages, setHeroImages] = useState([])
+    const [productsImages, setProductsImages] = useState([])
+    const [currentIndex, setCurrentIndex] = useState(0)
+    const currentImage = heroImages[currentIndex]
+    
 
     function startSesion (){
         if (usrInput == email && pswInput === password) {
             setNameUser(name)
             setAccOpened(false)
         }
-        
     }
 
+    
+
+    // Fetch de imágenes para el Hero
     useEffect(() => {
         async function loadImages() {
-            const response = await fetch("http://localhost:3001/images")
+            const response = await fetch("http://localhost:3001/hero-images")
             const data = await response.json()
-            console.log(data.photos[0].src)
-            setImages(data.photos)
+            setHeroImages(data.photos)
         }
-
         loadImages()
     }, [])
+
+    // Fetch de imágenes para los productos
+    useEffect(() => {
+        async function loadProdImages(){
+            const response = await fetch("http://localhost:3001/products-images")
+            const data = await response.json()
+            setProductsImages(data.photos)
+        }
+        loadProdImages()
+    }, [])
+
+    // Carrousell automático de imágenes
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setCurrentIndex((prevIndex) => (prevIndex + 1) % heroImages.length)
+        }, 4000);
+
+        return () => clearInterval(interval) // --> Limpieza del buffer
+    }, [heroImages.length])
     return (
         <div className="min-h-screen bg-[#23272f] text-white">
-            
             {/**CONTENIDO DEL LOGIN */}
             {accOpened && ( // --> Renderizado condicional para el MODAL
                 <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50" onClick={() => setAccOpened(false)}>
@@ -81,7 +104,7 @@ export function App () {
             {/**CONTENIDO DE LA CESTA */}
             <div className={`fixed inset-0 bg-black/50 transition-opacity duration-300 z-50 ${
                       cartOpened ? "opacity-100" : "opacity-0 pointer-events-none"
-                    }`} 
+                    }`}
                     onClick={() => setCartOpened(false)}>
                 <div className={`absolute top-0 right-0 h-screen w-100 bg-white text-black shadow-lg transform transition-transform duration-300 ${
                           cartOpened ? "translate-x-0" : "translate-x-full"
@@ -96,14 +119,12 @@ export function App () {
                         <img src={cartImg} alt="logo_EComerce" className="w-25 bg-amber-400 rounded-4xl p-2"/>
                         <h3 className="font-semibold">Cesta vacía</h3>
                         <p className="flex text-center">Explora artículos desde nuestra página principal</p>
-                        <a className="border p-2 rounded bg-amber-500 cursor-pointer hover:text-white hover:bg-amber-600 focus:ring-2 focus:ring-orange-400" href="http://localhost:5173">
+                        <a className="border p-2 rounded bg-amber-500 cursor-pointer hover:text-white hover:bg-amber-600 focus:ring-2 focus:ring-orange-400 transition duration-300" href="http://localhost:5173">
                             Explorar artículos
                         </a>
-                        
                     </div>
                 </div>
             </div>
-
             <header className="border-b p-4">
                 <div className="max-w-7xl mx-auto flex items-center justify-between gap-6">
                     <div className="flex items-center gap-3" id="headLeft">
@@ -133,16 +154,42 @@ export function App () {
                             <h3>Mi cesta</h3>
                         </div>
                     </div>
-                </div>   
+                </div>
             </header>
             <section>
-                <div className="mt-5">
-                    {images.map((image) => (
-                        <div key={image.id} className="flex flex-row">
-                            <img src={image.src.original} alt={image.alt}/>
+                {/**Contenido del Hero */}
+                <div className="overflow-hidden relative w-full h-150">
+                    <FiChevronLeft id="leftArrow" className="absolute bg-gray-600 opacity-50 hover:opacity-100 z-30 top-1/2 -translate-y-1/2 left-5 text-6xl transition cursor-pointer"
+                        onClick={() => setCurrentIndex((prevIndex) => prevIndex == 0? (heroImages.length - 1) : (prevIndex-1))}/>
+                    <div style={{transform: `translateX(-${currentIndex * 100}%)` }} className="flex transition-transform duration-500 h-full">
+                        {heroImages.map(image => (
+                            <div key={image.id} className="w-full h-full shrink-0">
+                                
+                                <img src={image.src.original} alt={image.alt} className="w-full h-full object-cover mask-b-from-50%"/>
+                                
+                            </div>
+                        ))}
+                    </div>
+                    <FiChevronRight id="rightArrow" className="absolute bg-gray-600 opacity-50 hover:opacity-100 z-30 top-1/2 -translate-y-1/2 right-5 text-6xl transition cursor-pointer focus:p-5"
+                        onClick={() => setCurrentIndex((prevIndex) => (prevIndex + 1) % heroImages.length)}/>
+                    
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 border w-full items-center justify-center gap-3 -mt-20">
+                    {productsImages.map((imgProd,index) => (
+                        <div key={imgProd.id} className="bg-white text-black rounded-xl shadow-lg overflow-hidden">
+                            <div className="h-48">
+                                <img src={imgProd.src.original} alt={imgProd.alt} className="w-full h-full object-cover"/>
+                            </div>
+                            <div className="p-4 flex flex-col gap-2">
+                                <h3>NombreProd</h3>
+                                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit..</p>
+                                <h2>Reseñas</h2>
+                            </div>
                         </div>
                     ))}
                 </div>
+
             </section>
             <footer>
                 pie de página
