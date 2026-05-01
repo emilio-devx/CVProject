@@ -1,6 +1,7 @@
 import "./App.css"
 import logo from "/Img/LogoE-comerce.png"
 import cartImg from "/Img/carritoImg.svg"
+import star from "/Img/star.svg"
 import { FiSearch, FiMenu, FiShoppingCart, FiUser, FiLock, FiChevronLeft, FiChevronRight   } from "react-icons/fi"
 import { FcGoogle } from "react-icons/fc";
 import { HiOutlineX } from "react-icons/hi";
@@ -18,6 +19,10 @@ export function App () {
     const [users, setUsers] = useState({name:"Santiago"})
     const [heroImages, setHeroImages] = useState([])
     const [productsImages, setProductsImages] = useState([])
+    const [helmetImages, setHelmetImages] = useState([])
+    const [protectionsImages, setProtectionsImages] = useState([])
+    const [wheelsImages, setWheelsImages] = useState([])
+    const [homeData, setHomeData] = useState()
     const [currentIndex, setCurrentIndex] = useState(0)
     const currentImage = heroImages[currentIndex]
     
@@ -29,26 +34,17 @@ export function App () {
         }
     }
 
-    
-
-    // Fetch de imágenes para el Hero
     useEffect(() => {
-        async function loadImages() {
-            const response = await fetch("http://localhost:3001/hero-images")
+        async function loadHomeImages(){
+            const response = await fetch("http://localhost:3001/home-data")
             const data = await response.json()
-            setHeroImages(data.photos)
+            setHeroImages(data.heroImages)
+            setHelmetImages(data.helmets)
+            setProtectionsImages(data.protections)
+            setWheelsImages(data.wheels)
+            setProductsImages(data.products)
         }
-        loadImages()
-    }, [])
-
-    // Fetch de imágenes para los productos
-    useEffect(() => {
-        async function loadProdImages(){
-            const response = await fetch("http://localhost:3001/products-images")
-            const data = await response.json()
-            setProductsImages(data.photos)
-        }
-        loadProdImages()
+        loadHomeImages()
     }, [])
 
     // Carrousell automático de imágenes
@@ -83,7 +79,7 @@ export function App () {
                                     Iniciar Sesion
                                 </button>
                             </form>
-                            <span className="underline text-xs cursor-pointer font-medium">He olvidado mi contraseña</span>
+                            <span className="text-xs cursor-pointer font-medium hover:underline">He olvidado mi contraseña</span>
                             <div className="flex flex-col">
                                 <div className="flex items-center gap-3 my-4">
                                 <div className="flex-1 h-px bg-gray-300"></div>
@@ -174,25 +170,137 @@ export function App () {
                         onClick={() => setCurrentIndex((prevIndex) => (prevIndex + 1) % heroImages.length)}/>
                     
                 </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 border w-full items-center justify-center gap-3 -mt-20">
-                    {productsImages.map((imgProd,index) => (
-                        <div key={imgProd.id} className="bg-white text-black rounded-xl shadow-lg overflow-hidden">
+                {/**Productos hero */}
+                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 3xl:grid-cols-6 w-full max-w-7xl mx-auto items-center justify-center gap-3 -mt-20 px-4">
+                    {productsImages.slice(0, 12).map((imgProd) => (
+                        <div key={imgProd.id} className="bg-white text-black rounded-xl shadow-lg overflow-hidden hover:cursor-pointer hover:bg-amber-300 transition duration-400">
                             <div className="h-48">
                                 <img src={imgProd.src.original} alt={imgProd.alt} className="w-full h-full object-cover"/>
                             </div>
-                            <div className="p-4 flex flex-col gap-2">
-                                <h3>NombreProd</h3>
-                                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit..</p>
-                                <h2>Reseñas</h2>
+                            <div className="p-5 flex flex-col gap-2">
+                                <h3 className="font-body text-xl font-semibold">Patín Artístico</h3>
+                                <p className="font-body text-gray-700">Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+                                <h2 className="font-body text-3xl font-bold">89'99€</h2>
+                                <span className="flex items-center"><h3 className="font-body"><b>8/10 ·</b></h3>
+                                    <img src={star} alt="star" className="w-5 h-full"/><h3 className="font-body">1000 reseñas</h3>
+                                </span>
                             </div>
                         </div>
                     ))}
                 </div>
+                <div className=" bg-gray-600 mt-10">
+                    
+                    <div className="grid w-full max-w-7xl mx-auto items-center justify-center p-8 gap-3">
+                        <div className="flex justify-between"><h2 className="text-4xl font-title">Productos más vendidos</h2><h3 className="font-body underline cursor-pointer">Ver más</h3></div>
+                        <div className="grid grid-cols-4 gap-3">
+                            {productsImages.slice(12,16).map((imgProd) => (
+                                <div key={imgProd.id} className="bg-white rounded-xl overflow-hidden hover:cursor-pointer hover:bg-amber-300 transition duration-400">
+                                    <div className="h-48">
+                                        <img src={imgProd.src.original} alt={imgProd.alt} className="w-full h-full object-cover"/> 
+                                    </div>
+                                    <div className="p-5 flex flex-col gap-2 text-black">
+                                        <h3 className="font-body text-xl font-semibold">Patín Agresivo</h3>
+                                        <p className="font-body">Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+                                        <h2 className="font-body text-3xl font-bold">89'99€</h2>
+                                        <span className="flex items-center"><h3 className="font-body"><b>8/10 ·</b></h3>
+                                            <img src={star} alt="star" className="w-5 h-full"/><h3 className="font-body">1000 reseñas</h3>
+                                        </span>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
 
+                {/**Grid images divs*/}
+                <div className="w-full max-w-7xl mx-auto items-center justify-center pt-10">
+                    <div className="flex items-center justify-center gap-5">
+                        <div className="bg-white grid grid-cols-2 p-8 gap-3 w-1/3">
+                            {helmetImages.map(helmet => (
+                                <div key={helmet.id} className="bg-white overflow-hidden cursor-pointer ">
+                                    <div key={helmet.id} className="h-45">
+                                        <img src={helmet.src.original} alt={helmet.alt} className="w-full h-full object-cover"/>
+                                    </div>
+                                    <span className="text-black font-body">Casco</span>
+                                </div>
+                            ))}
+                            <span className="text-blue-500 font-body font-semibold cursor-pointer">Ver más</span>
+                        </div>
+                        <div className="bg-white grid grid-cols-2 p-8 gap-3 w-1/3">
+                            {protectionsImages.map(helmet => (
+                                <div key={helmet.id} className="bg-white overflow-hidden cursor-pointer">
+                                    <div key={helmet.id} className="h-45">
+                                        <img src={helmet.src.original} alt={helmet.alt} className="w-full h-full object-cover"/>
+                                    </div>
+                                    <span className="text-black font-body">Protección</span>
+                                </div>
+                            ))}
+                            <span className="text-blue-500 font-body font-semibold cursor-pointer">Ver más</span>
+                        </div>
+                        <div className="bg-white grid grid-cols-2 p-8 gap-3 w-1/3">
+                            {wheelsImages.map(helmet => (
+                                <div key={helmet.id} className="bg-white overflow-hidden cursor-pointer">
+                                    <div key={helmet.id} className="h-45">
+                                        <img src={helmet.src.original} alt={helmet.alt} className="w-full h-full object-cover"/>
+                                    </div>
+                                    <span className="text-black font-body">Ruedas</span>
+                                </div>
+                            ))}
+                            <span className="text-blue-500 font-body font-semibold cursor-pointer">Ver más</span>
+                        </div>
+                    </div> 
+                </div>
+                
+                <div className=" bg-gray-600 mt-10">
+                    
+                    <div className="grid w-full max-w-7xl mx-auto items-center justify-center pt-10 pb-10 gap-3">
+                        <div className="flex justify-between"><h2 className="text-4xl font-title">Productos más vendidos</h2><h3 className="font-body underline cursor-pointer">Ver más</h3></div>
+                        <div className="grid grid-cols-4 gap-3">
+                            {productsImages.slice(12,16).map((imgProd) => (
+                                <div key={imgProd.id} className="bg-white rounded-xl overflow-hidden hover:cursor-pointer hover:bg-amber-300 transition duration-400">
+                                    <div className="h-48">
+                                        <img src={imgProd.src.original} alt={imgProd.alt} className="w-full h-full object-cover"/> 
+                                    </div>
+                                    <div className="p-5 flex flex-col gap-2 text-black">
+                                        <h3 className="font-body text-xl font-semibold">Patín Agresivo</h3>
+                                        <p className="font-body">Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+                                        <h2 className="font-body text-3xl font-bold">89'99€</h2>
+                                        <span className="flex items-center"><h3 className="font-body"><b>8/10 ·</b></h3>
+                                            <img src={star} alt="star" className="w-5 h-full"/><h3 className="font-body">1000 reseñas</h3>
+                                        </span>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+
+                <div className="grid w-full max-w-7xl mx-auto items-center justify-center p-8 gap-3">
+                        <h2 className="grid text-4xl font-title">Productos en Oferta</h2>
+                        <div className="grid grid-cols-4 gap-3">
+                            {productsImages.slice(16,20).map((imgProd) => (
+                                <div key={imgProd.id} className="bg-white rounded-xl overflow-hidden hover:cursor-pointer border hover:bg-amber-300 transition duration-400 relative">
+                                    <h3 className="bg-red-500 absolute font-bold font-body p-1 rounded-xl">-50%</h3>
+                                    <div className="h-48">
+                                        <img src={imgProd.src.original} alt={imgProd.alt} className="w-full h-full object-cover"/> 
+                                    </div>
+                                    <div className="p-5 flex flex-col gap-2 text-black ">
+                                        <h3 className="font-body text-xl font-semibold">Patín fitness</h3>
+                                        <p className="font-body">Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+                                        <span className="flex items-center gap-3"><h2 className="font-body text-3xl font-bold">44'99€</h2><h3 className="font-body text-xl line-through text-gray-500">89'99€</h3></span>
+                                        <span className="flex items-center"><h3 className="font-body"><b>8/10 ·</b></h3>
+                                            <img src={star} alt="star" className="w-5 h-full"/><h3 className="font-body">1000 reseñas</h3>
+                                        </span>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
             </section>
             <footer>
-                pie de página
+                <div className="flex gap-4 bg-gray-900">
+                    <h5>Condiciones de Uso y Venta</h5><h5>Aviso de privacidad</h5><h5>Área legal</h5><h5>Cookies</h5><h5>Publicidad basada en intereses</h5>
+                </div>
             </footer>
         </div>
     )
