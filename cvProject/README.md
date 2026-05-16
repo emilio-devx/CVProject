@@ -28,13 +28,13 @@ Aplicación de tareas creada para practicar fundamentos de React como estado, re
 ### 1. Instalar dependencias del frontend
 
 ```bash
-npm install
+pnpm install
 ```
 
 ### 2. Iniciar el frontend
 
 ```bash
-npm run dev
+pnpm dev
 ```
 
 ## Estado
