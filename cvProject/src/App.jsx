@@ -140,7 +140,7 @@ export function App (){
                     {getFilteredTasks().map((task) =>( // --> Muestra la lista pero filtrada según si es all, active o completed
                         // ---Card task---
                         <div key={task.id}
-                            className="border flex items-center gap-2 p-2 my-1 rounded">
+                            className="border flex items-center gap-2 p-2 my-1 rounded overflow-hidden">
                                 {task.isEditing?
                                 <>
                                     <input type="checkbox" 
@@ -148,12 +148,12 @@ export function App (){
                                     <input type="text"
                                         value={task.tempText ?? ''} // => Si no es nulo ni undefined se queda con el valor de la izquierda de lo contrario: ''
                                         onChange={(e) => handlerEditingTask(task.id, e.target.value)}
-                                        className="border-3 border-blue-500"/>
-                                    <button className="px-2 py-1 rounded bg-green-500 text-white cursor-pointer"
+                                        className="flex-1 min-w-0 w-full border-2 border-blue-500 px-2 py-1 rounded"/>
+                                    <button className="shrink-0 px-2 py-1 rounded bg-green-500 text-white cursor-pointer"
                                             onClick={() => updateTask(task.id)}>
                                         Save
                                     </button>
-                                    <button className="px-2 py-1 rounded bg-red-500 text-white cursor-pointer"
+                                    <button className="shrink-0 px-2 py-1 rounded bg-red-500 text-white cursor-pointer"
                                             onClick={() => cancelTask(task.id)}>
                                         Cancel
                                     </button>
