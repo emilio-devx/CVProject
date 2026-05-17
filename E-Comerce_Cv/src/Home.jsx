@@ -104,7 +104,7 @@ export function Home () {
                       cartOpened ? "opacity-100" : "opacity-0 pointer-events-none"
                     }`}
                     onClick={() => setCartOpened(false)}>
-                <div className={`absolute top-0 right-0 h-screen w-100 bg-white text-black shadow-lg transform transition-transform duration-300 ${
+                <div className={`absolute top-0 right-0 h-screen w-full sm:w-100 bg-white text-black shadow-lg transform transition-transform duration-300 ${
                           cartOpened ? "translate-x-0" : "translate-x-full"
                         }`}onClick={(e) => e.stopPropagation()}>
                     <div className="flex items-center justify-between border-b pb-3 mb-3 p-5">
@@ -123,18 +123,19 @@ export function Home () {
                     </div>
                 </div>
             </div>
+            {/** -- HEADER --*/}
             <header className="border-b p-4">
-                <div className="max-w-7xl mx-auto flex items-center justify-between gap-6">
+                <div className="max-w-7xl mx-auto flex items-center justify-between gap-4 lg:flex-row">
                     <div className="flex items-center gap-3" id="headLeft">
                         <a href="#" id="logoHome">
-                            <img src={logo} alt="logo_EComerce" className="w-16"/>
+                            <img src={logo} alt="logo_EComerce" className="w-16 h-13"/>
                         </a>
                         <div className="flex items-center gap-2 cursor-pointer p-3 rounded hover:bg-gray-600 transition">
-                            <FiMenu className="text-xl"/><h3>Todas las categorías</h3>
+                            <FiMenu className="text-xl"/><h3 className="hidden md:block">Todas las categorías</h3>
                         </div>
                     </div>
                     <div className="flex flex-1" id="headMid">
-                        <input type="text" className="border h-10 rounded-l-md border-r-0 pl-4 flex-1" placeholder="Buscar" name="search"/>
+                        <input type="text" className="border h-10 rounded-l-md border-r-0 pl-4 w-full lg:flex-1" placeholder="Buscar" name="search"/>
                         <button className="border h-10 px-3 py-2 bg-orange-500 border-l-0 rounded-r-md flex items-center justify-center cursor-pointer hover:bg-amber-600 transition focus:ring-2 focus:ring-orange-400">
                             <FiSearch className="text-xl"/>
                         </button>
@@ -142,21 +143,21 @@ export function Home () {
                     <div className="flex items-center justify-center gap-3" id="headRight">
                         <div className="flex items-center gap-2 cursor-pointer p-3 rounded hover:bg-gray-600 transition focus:bg-gray-900" onClick={() => setAccOpened(true)}>
                             <FiUser className="text-xl"/>
-                            <span>{nameUser}</span>
+                            <span className="hidden md:block">{nameUser}</span>
                         </div>
                         <div className="flex items-center gap-3 cursor-pointer p-3 rounded hover:bg-gray-600 transition" onClick={() => setCartOpened(true)}>
                             <div className="relative">
                                 <FiShoppingCart className="text-xl" />
                                 <span id="cartArticlesNum" className="absolute -top-2 -right-2 bg-red-500 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">0</span>
                             </div>
-                            <h3>Mi cesta</h3>
+                            <h3 className="hidden md:block">Mi cesta</h3>
                         </div>
                     </div>
                 </div>
             </header>
             <section>
                 {/**Contenido del Hero */}
-                <div className="overflow-hidden relative w-full h-150">
+                <div className="overflow-hidden relative w-full h-[300px] md:h-[450px] xl:h-[600px]">
                     <FiChevronLeft id="leftArrow" className="absolute bg-gray-600 opacity-50 hover:opacity-100 z-30 top-1/2 -translate-y-1/2 left-5 text-6xl transition cursor-pointer"
                         onClick={() => setCurrentIndex((prevIndex) => prevIndex == 0? (heroImages.length - 1) : (prevIndex-1))}/>
                     <div style={{transform: `translateX(-${currentIndex * 100}%)` }} className="flex transition-transform duration-500 h-full">
@@ -173,7 +174,7 @@ export function Home () {
                     
                 </div>
                 {/**Productos hero */}
-                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 3xl:grid-cols-6 w-full max-w-7xl mx-auto items-center justify-center gap-3 -mt-20 px-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 w-full max-w-7xl mx-auto items-center justify-center gap-3 -mt-20 px-4">
                     {productsImages.slice(0, 8).map((imgProd) => (
                         <div key={imgProd.id} className="bg-white text-black rounded-xl shadow-lg overflow-hidden hover:cursor-pointer hover:bg-amber-300 transition duration-400">
                             <div className="h-48">
@@ -193,8 +194,8 @@ export function Home () {
                 <div className=" bg-gray-600 mt-10">
                     
                     <div className="grid w-full max-w-7xl mx-auto items-center justify-center p-8 gap-3">
-                        <div className="flex justify-between"><h2 className="text-4xl font-title">Productos más vendidos</h2><h3 className="font-body underline cursor-pointer">Ver más</h3></div>
-                        <div className="grid grid-cols-4 gap-3">
+                        <div className="flex flex-col sm:flex-row sm:justify-between gap-3"><h2 className="text-4xl font-title">Productos más vendidos</h2><h3 className="font-body underline cursor-pointer">Ver más</h3></div>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
                             {productsImages.slice(8,12).map((imgProd) => (
                                 <div key={imgProd.id} className="bg-white rounded-xl overflow-hidden hover:cursor-pointer hover:bg-amber-300 transition duration-400">
                                     <div className="h-48">
@@ -216,8 +217,8 @@ export function Home () {
 
                 {/**Grid divs*/}
                 <div className="w-full max-w-7xl mx-auto items-center justify-center pt-10">
-                    <div className="flex items-center justify-center gap-5">
-                        <div className="bg-white grid grid-cols-2 p-8 gap-3 w-1/3">
+                    <div className="flex flex-col lg:flex-row items-center justify-center gap-5">
+                        <div className="bg-white grid grid-cols-2 p-8 gap-3 w-full lg:w-1/3">
                             {helmetImages.map(helmet => (
                                 <div key={helmet.id} className="bg-white overflow-hidden cursor-pointer ">
                                     <div key={helmet.id} className="h-45">
@@ -228,7 +229,7 @@ export function Home () {
                             ))}
                             <span className="text-blue-500 font-body font-semibold cursor-pointer w-fit hover:underline">Ver más</span>
                         </div>
-                        <div className="bg-white grid grid-cols-2 p-8 gap-3 w-1/3">
+                        <div className="bg-white grid grid-cols-2 p-8 gap-3 w-full lg:w-1/3">
                             {protectionsImages.map(helmet => (
                                 <div key={helmet.id} className="bg-white overflow-hidden cursor-pointer">
                                     <div key={helmet.id} className="h-45">
@@ -239,7 +240,7 @@ export function Home () {
                             ))}
                             <span className="text-blue-500 font-body font-semibold cursor-pointer w-fit hover:underline">Ver más</span>
                         </div>
-                        <div className="bg-white grid grid-cols-2 p-8 gap-3 w-1/3">
+                        <div className="bg-white grid grid-cols-2 p-8 gap-3 w-full lg:w-1/3">
                             {wheelsImages.map(helmet => (
                                 <div key={helmet.id} className="bg-white overflow-hidden cursor-pointer">
                                     <div key={helmet.id} className="h-45">
@@ -252,10 +253,10 @@ export function Home () {
                         </div>
                     </div> 
                 </div>
-
+                {/** --PRODS OFERTA-- */}
                 <div className="grid w-full max-w-7xl mx-auto items-center justify-center p-8 gap-3">
                         <h2 className="grid text-4xl font-title">Productos en Oferta</h2>
-                        <div className="grid grid-cols-4 gap-3">
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
                             {productsImages.slice(12,16).map((imgProd) => (
                                 <div key={imgProd.id} className="bg-white rounded-xl overflow-hidden hover:cursor-pointer border hover:bg-amber-300 transition duration-400 relative">
                                     <h3 className="bg-red-500 absolute font-bold font-body p-1 rounded-xl">-50%</h3>
@@ -278,9 +279,9 @@ export function Home () {
             {/**Footer section */}
             <footer className="bg-[#17191a] font-body mt-10">
                 <div className="w-full max-w-7xl mx-auto items-center p-8">
-                    <div id="footerSuperior" className="flex mt-5 justify-between items-center">
-                        <div className="flex flex-col gap-5 max-w-80 ">
-                            <a href="#logoHome" className="text-4xl font-title hover:text-yellow-500 transition duration-500 w-fit rounded">Prime Roller Skates</a>
+                    <div id="footerSuperior" className="flex flex-col gap-8 lg:flex-row mt-5 justify-between items-center">
+                        <div className="flex flex-col gap-5 max-w-80 text-center lg:text-left">
+                            <a href="#logoHome" className="text-4xl font-title hover:text-yellow-500 transition duration-500 lg:w-fit rounded">Prime Roller Skates</a>
                             <h5 className="text-gray-400"><i>La tienda que necesitas para comprar lo que desees, para rodar a gusto y seguro</i></h5>
                         </div>
                         <nav className="flex items-center gap-4">
