@@ -1,4 +1,6 @@
-import "./App.css"
+import "../App.css"
+import { ProductCardSkeleton } from "../components/ProductCardSkeleton"
+import { CategoryGridSkeleton } from "../components/CategoryGridSkeleton"
 import logo from "/Img/LogoE-comerce.png"
 import cartImg from "/Img/carritoImg.svg"
 import star from "/Img/star.svg"
@@ -27,6 +29,7 @@ export function Home () {
     const [homeData, setHomeData] = useState()
     const [currentIndex, setCurrentIndex] = useState(0)
     const currentImage = heroImages[currentIndex]
+    const [loading, setLoading] = useState(true)
     
     {/**`${import.meta.env.VITE_API_URL}/home-data` */}
     function startSesion (){
@@ -37,16 +40,26 @@ export function Home () {
     }
 
     useEffect(() => {
-        async function loadHomeImages(){
-            const response = await fetch("/api/pexels")
-            const data = await response.json()
-            setHeroImages(data.heroImages || [])
-            setHelmetImages(data.helmets || [])
-            setProtectionsImages(data.protections || [])
-            setWheelsImages(data.wheels || [])
-            setProductsImages(data.products || [])
+        async function loadHomeImages() {
+            try {
+              setLoading(true)
+
+              const response = await fetch("/api/pexels")
+              const data = await response.json()
+
+              setHeroImages(data.heroImages || [])
+              setHelmetImages(data.helmets || [])
+              setProtectionsImages(data.protections || [])
+              setWheelsImages(data.wheels || [])
+              setProductsImages(data.products || [])
+            } catch (error) {
+              console.error("Error al cargar las imágenes: ", error)
+            } finally {
+              setLoading(false)
+            }
         }
-        loadHomeImages()
+  
+      loadHomeImages()
     }, [])
 
     // Carrousell automático de imágenes
@@ -157,7 +170,7 @@ export function Home () {
             </header>
             <section>
                 {/**Contenido del Hero */}
-                <div className="overflow-hidden relative w-full h-[300] md:h-[450] xl:h-[600]">
+                <div className="overflow-hidden relative w-full h-75 md:h-[450px] xl:h-[600px]">
                     <FiChevronLeft id="leftArrow" className="absolute bg-gray-600 opacity-50 hover:opacity-100 z-30 top-1/2 -translate-y-1/2 left-5 text-6xl transition cursor-pointer"
                         onClick={() => setCurrentIndex((prevIndex) => prevIndex == 0? (heroImages.length - 1) : (prevIndex-1))}/>
                     <div style={{transform: `translateX(-${currentIndex * 100}%)` }} className="flex transition-transform duration-500 h-full">
@@ -175,7 +188,11 @@ export function Home () {
                 </div>
                 {/**Productos hero */}
                 <div className="grid text-sm grid-cols-2 sm:text-base lg:grid-cols-4 2xl:grid-cols-5 w-full max-w-7xl mx-auto items-center justify-center gap-3 -mt-20 px-4">
-                    {productsImages.slice(0, 8).map((imgProd) => (
+                    {loading 
+                        ? Array.from({ length: 8 }).map((_, index) => (
+                            <ProductCardSkeleton key={index} />
+                            ))
+                        : productsImages.slice(0, 8).map((imgProd) => (
                         <div key={imgProd.id} className="text-center sm:text-left bg-white text-black rounded-xl shadow-lg overflow-hidden hover:cursor-pointer hover:bg-amber-300 transition duration-400">
                             <div className="h-32 sm:h-48">
                                 <img src={imgProd.src.medium} alt={imgProd.alt} loading="lazy" className="w-full h-full object-cover"/>
@@ -202,11 +219,17 @@ export function Home () {
                 </div>
                 {/** --Prod mas vendidos-- */}
                 <div className=" bg-gray-600 mt-10">
-                    
-                    <div className="grid w-full max-w-7xl mx-auto items-center justify-center p-8 gap-3">
-                        <div className="flex flex-col sm:flex-row sm:justify-between gap-3"><h2 className="text-4xl font-title">Productos más vendidos</h2><h3 className="font-body underline cursor-pointer">Ver más</h3></div>
+                    <div className="grid w-full max-w-7xl mx-auto p-8">
+                        <div className="flex flex-col sm:flex-row sm:justify-between gap-3 mb-3">
+                            <h2 className="text-2xl sm:text-4xl font-title">Productos más vendidos</h2>
+                            <h3 className="font-body underline cursor-pointer">Ver más</h3>
+                        </div>
                         <div className="grid text-sm grid-cols-2 sm:text-base lg:grid-cols-4 gap-3">
-                            {productsImages.slice(8,12).map((imgProd) => (
+                            {loading
+                            ? Array.from({ length: 4 }).map((_, index) => (
+                                <ProductCardSkeleton key={index} />
+                                ))
+                            : productsImages.slice(8,12).map((imgProd) => (
                                 <div key={imgProd.id} className="text-center sm:text-left bg-white rounded-xl overflow-hidden hover:cursor-pointer hover:bg-amber-300 transition duration-400">
                                     <div className="h-32 sm:h-48">
                                         <img src={imgProd.src.medium} alt={imgProd.alt} loading="lazy" className="w-full h-full object-cover"/> 
@@ -237,46 +260,63 @@ export function Home () {
                 {/**Grid divs*/}
                 <div className="w-full max-w-7xl mx-auto items-center justify-center pt-10">
                     <div className="flex flex-col lg:flex-row items-center justify-center gap-5">
-                        <div className="bg-white grid grid-cols-2 p-8 gap-3 w-full lg:w-1/3">
-                            {helmetImages.map(helmet => (
-                                <div key={helmet.id} className="bg-white overflow-hidden cursor-pointer ">
-                                    <div key={helmet.id} className="h-32 sm:h-45">
-                                        <img src={helmet.src.medium} loading="lazy" alt={helmet.alt} className="w-full h-full object-cover"/>
-                                    </div>
-                                    <span className="text-black font-body">Casco</span>
+                        {loading ? (
+                            <>
+                              <CategoryGridSkeleton />
+                              <CategoryGridSkeleton />
+                              <CategoryGridSkeleton />
+                            </>
+                        ) : (
+                            <>
+                                {/** Cascos */}
+                                <div className="bg-white grid grid-cols-2 p-8 gap-3 w-full lg:w-1/3">
+                                    {helmetImages.map(helmet => (
+                                        <div key={helmet.id} className="bg-white overflow-hidden cursor-pointer ">
+                                            <div key={helmet.id} className="h-32 sm:h-45">
+                                                <img src={helmet.src.medium} loading="lazy" alt={helmet.alt} className="w-full h-full object-cover"/>
+                                            </div>
+                                            <span className="text-black font-body">Casco</span>
+                                        </div>
+                                    ))}
+                                    <span className="text-blue-500 font-body font-semibold cursor-pointer w-fit hover:underline">Ver más</span>
                                 </div>
-                            ))}
-                            <span className="text-blue-500 font-body font-semibold cursor-pointer w-fit hover:underline">Ver más</span>
-                        </div>
-                        <div className="bg-white grid grid-cols-2 p-8 gap-3 w-full lg:w-1/3">
-                            {protectionsImages.map(helmet => (
-                                <div key={helmet.id} className="bg-white overflow-hidden cursor-pointer">
-                                    <div key={helmet.id} className="h-32 lg:h-45">
-                                        <img src={helmet.src.medium} loading="lazy" alt={helmet.alt} className="w-full h-full object-cover"/>
-                                    </div>
-                                    <span className="text-black font-body">Protección</span>
+                                {/** Protecciones */}
+                                <div className="bg-white grid grid-cols-2 p-8 gap-3 w-full lg:w-1/3">
+                                    {protectionsImages.map(protecciones => (
+                                        <div key={protecciones.id} className="bg-white overflow-hidden cursor-pointer">
+                                            <div key={protecciones.id} className="h-32 lg:h-45">
+                                                <img src={protecciones.src.medium} loading="lazy" alt={protecciones.alt} className="w-full h-full object-cover"/>
+                                            </div>
+                                            <span className="text-black font-body">Protección</span>
+                                        </div>
+                                    ))}
+                                    <span className="text-blue-500 font-body font-semibold cursor-pointer w-fit hover:underline">Ver más</span>
                                 </div>
-                            ))}
-                            <span className="text-blue-500 font-body font-semibold cursor-pointer w-fit hover:underline">Ver más</span>
-                        </div>
-                        <div className="bg-white grid grid-cols-2 p-8 gap-3 w-full lg:w-1/3">
-                            {wheelsImages.map(helmet => (
-                                <div key={helmet.id} className="bg-white overflow-hidden cursor-pointer">
-                                    <div key={helmet.id} className="h-32 sm:h-45">
-                                        <img src={helmet.src.medium} loading="lazy" alt={helmet.alt} className="w-full h-full object-cover"/>
-                                    </div>
-                                    <span className="text-black font-body">Ruedas</span>
+                                {/** Ruedas */}
+                                <div className="bg-white grid grid-cols-2 p-8 gap-3 w-full lg:w-1/3">
+                                    {wheelsImages.map(ruedas => (
+                                        <div key={ruedas.id} className="bg-white overflow-hidden cursor-pointer">
+                                            <div key={ruedas.id} className="h-32 sm:h-45">
+                                                <img src={ruedas.src.medium} loading="lazy" alt={ruedas.alt} className="w-full h-full object-cover"/>
+                                            </div>
+                                            <span className="text-black font-body">Ruedas</span>
+                                        </div>
+                                    ))}
+                                    <span className="text-blue-500 font-body font-semibold cursor-pointer w-fit hover:underline">Ver más</span>
                                 </div>
-                            ))}
-                            <span className="text-blue-500 font-body font-semibold cursor-pointer w-fit hover:underline">Ver más</span>
-                        </div>
+                            </>
+                        )}
                     </div> 
                 </div>
                 {/** --PRODS OFERTA-- */}
-                <div className="grid w-full max-w-7xl mx-auto items-center justify-center p-8 gap-3">
+                <div className="grid w-full max-w-7xl mx-auto p-8">
                         <h2 className="grid text-4xl font-title">Productos en Oferta</h2>
-                        <div className="grid text-sm grid-cols-2 lg:grid-cols-4 sm:text-base  gap-3">
-                            {productsImages.slice(12,16).map((imgProd) => (
+                        <div className="grid text-sm grid-cols-2 lg:grid-cols-4 sm:text-base gap-3">
+                            {loading
+                                ? Array.from({ length: 4 }).map((_, index) => (
+                                    <ProductCardSkeleton key={index} />
+                                    ))
+                                : productsImages.slice(12,16).map((imgProd) => (
                                 <div key={imgProd.id} className="bg-white rounded-xl overflow-hidden hover:cursor-pointer border hover:bg-amber-300 transition duration-400 relative">
                                     <h3 className="bg-red-500 absolute font-bold font-body p-1 rounded-xl">-50%</h3>
                                     <div className="h-32 sm:h-48">
