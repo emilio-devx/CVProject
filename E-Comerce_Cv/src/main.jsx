@@ -1,4 +1,9 @@
-import { createRoot } from "react-dom/client";
-import { Home } from "./pages/Home.jsx"
+import { createRoot } from "react-dom/client"
+import { BrowserRouter } from "react-router"
+import { App } from "./App.jsx"
 const root = createRoot(document.getElementById('app'))
-root.render(<Home />)
+root.render(
+    <BrowserRouter>
+        <App />
+    </BrowserRouter>
+)
