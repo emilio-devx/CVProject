@@ -1,62 +1,85 @@
 import { Footer } from "../components/Footer.jsx"
 import { Header } from "../components/Header.jsx"
-import { Link } from "react-router"
-import { FiPlus, FiMinus, FiHeart  } from "react-icons/fi"
-import { GoShieldCheck } from "react-icons/go"
+import { Link, useLocation } from "react-router"
 import star from "/Img/star.svg"
 import { useState } from "react"
 
-export function Product(){
+{/**Icons */}
+import { FiPlus, FiMinus, FiHeart  } from "react-icons/fi"
+import { GiSteeltoeBoots, GiCartwheel  } from "react-icons/gi"
+import { FaToolbox, FaTruck, FaCheckCircle  } from "react-icons/fa"
+import { GoShieldCheck } from "react-icons/go"
+import { BsSignStopFill } from "react-icons/bs"
+import { FaRulerCombined } from "react-icons/fa6"
+
+
+
+export function Product({ addToCart }){
+    const location = useLocation()
+    const product = location.state?.product
+
     const tallasDisponibles = [38, 39, 40, 41, 42, 43, 44]
     const [tallaSeleccionada, setTallaSeleccionada] = useState(null)
+    const [counterProduct, setCounterProduct] = useState(1)
+
+    function handleAddCart(){
+        addToCart(product)
+    }
 
     return(
         <main className="min-h-screen bg-[#23272f] text-white">
-            <Header />
-            
             <section className="mt-5 max-w-7xl mx-auto flex flex-col gap-4 p-5">
                 {/**--Path de páginas-- */}
                 <nav className="flex gap-2">
                     <Link to="/" className="hover:underline">Inicio</Link>
                     <h3>&gt;</h3>
-                    <h3 className="font-bold">Patin freestyle</h3>
+                    <h3 className="font-bold">{product.name}</h3>
                 </nav>
                 
                 {/**-- Seccion de img-detalles-cart -- */}
                 <div className="flex flex-col lg:flex-row gap-10 items-start">
                     {/**--Imagen-- */}
-                    <div className="w-full lg:basis-[35%] aspect-square bg-gray-400"></div>
+                    <div className="w-full lg:basis-[35%] aspect-square bg-gray-400 rounded overflow-hidden">
+                        <img src={product.image} alt={product.alt} className="w-full h-full object-cover" />
+                    </div>
                     {/**--Descripcion y detalles-- */}
                     <div className="w-full lg:basis-[40%] flex flex-col gap-5">
-                        <h1 className="font-title text-6xl">Patin freestyle</h1>
-                        <h2 className="font-body text-4xl">199'99€</h2>
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Facere architecto reiciendis id. 
-                            Neque sed dicta dolorum soluta quae vero
+                        <h1 className="font-title text-6xl">{product.name}</h1>
+                        <h2 className="font-body text-4xl">{product.price}€</h2>
+                        <p>{product.description}
                         </p>
                         <div className="font-body flex flex-col gap-5">
                             <div className="flex gap-3">
-                                <div className="bg-amber-200 w-15 h-8"></div>
+                                <div className="w-15 h-8">
+                                    <GiSteeltoeBoots className="w-full h-full"/>
+                                </div>
                                 <div>
                                     <h2 className="font-bold top-0 left-0">Bota</h2>
                                     <p className="text-gray-400">Estructura rigida con ventilacion lateral para mayor transpirabilidad y soporte</p>
                                 </div>
                             </div>
                             <div className="flex gap-3">
-                                <div className="bg-amber-200 w-15 h-8"></div>
+                                <div className="w-15 h-8">
+                                    <GiCartwheel className="w-full h-full"/>
+                                </div>
                                 <div>
                                     <h2 className="font-bold">Ruedas</h2>
                                     <p className="text-gray-400">Estructura rigida con ventilacion lateral para mayor transpirabilidad y soporte</p>
                                 </div>
                             </div>
                             <div className="flex gap-3">
-                                <div className="bg-amber-200 w-15 h-8"></div>
+                                <div className=" w-15 h-8">
+                                    <FaToolbox className="w-full h-full"/>
+                                </div>
                                 <div>
                                     <h2 className="font-bold">Rodamientos</h2>
                                     <p className="text-gray-400">Estructura rigida con ventilacion lateral para mayor transpirabilidad y soporte</p>
                                 </div>
                             </div>
                             <div className="flex gap-3">
-                                <div className="bg-amber-200 w-15 h-8"></div>
+                                <div className=" w-15 h-8">
+                                    <BsSignStopFill className="w-full h-full"/>
+                                </div>
                                 <div>
                                     <h2 className="font-bold">Freno</h2>
                                     <p className="text-gray-400">Estructura rigida con ventilacion lateral para mayor transpirabilidad y soporte</p>
@@ -68,8 +91,11 @@ export function Product(){
                     {/**--Cart de carrito y compra-- */}
                     <div className="bg-gray-700 w-full lg:basis-[25%] border rounded-sm p-4 font-body flex flex-col gap-5">
                         <div className="flex justify-between">
-                            <h3>Talla</h3>
-                            <h4>Guia de tallas</h4>
+                            <h3 className="text-2xl font-title">TALLA</h3>
+                            <div className="flex gap-2 items-center cursor-pointer hover:underline">
+                                <h4>Guia de tallas</h4>
+                                <FaRulerCombined />
+                            </div>
                         </div>
                         <div className="flex gap-2 justify-between items-center">
                             {tallasDisponibles.map(talla => (
@@ -83,17 +109,28 @@ export function Product(){
                                 </button>
                             ))}
                         </div>
-                        <div>
-                            <h4>En stock - Recíbelo en 24/48h</h4>
-                            <h4>Envio gratis en pedidos superiores a 59€</h4>
+                        <div className="flex flex-col gap-3">
+                            <div className="flex gap-2 items-center">
+                                <FaCheckCircle className="text-green-400 w-5 h-5"/>
+                                <h4><span className="text-green-400">En stock</span> - Recíbelo en 24/48h</h4>
+                            </div>
+                            <div className="flex gap-2 inset-s-auto">
+                                <FaTruck className="w-5 h-5"/>
+                                <h4>Envio gratis en pedidos superiores a 59€</h4>
+                            </div>
                         </div>
-                        <div className="flex items-center gap-2 border w-30 h-12 justify-between">
-                            <button className="cursor-pointer"><FiMinus className="justify-center"/></button>
-                            <span>1</span>
-                            <button className="cursor-pointer"><FiPlus /></button>
+                        <div className="flex items-center gap-2 border border-gray-200 rounded-sm w-30 h-12 justify-between px-3 p-1">
+                            <button className="flex cursor-pointer justify-center items-center active:scale-80 transition-transform shadow-sm text-gray-200"
+                                    onClick={() => setCounterProduct(prevCounterProduct => Math.max(1, prevCounterProduct - 1))}><FiMinus /></button>
+                            <span className="select-none">{counterProduct}</span>
+                            <button className="flex cursor-pointer justify-center items-center transform active:scale-80 transition-transform shadow-sm text-gray-200"
+                                    onClick={() => setCounterProduct(counterProduct + 1)}><FiPlus /></button>
                         </div>
                         <div className="flex gap-3 justify-between">
-                            <button className="bg-green-600 rounded flex-1 h-12 cursor-pointer hover:bg-green-500 transition">AÑADIR AL CARRITO</button>
+                            <button className="bg-green-600 rounded flex-1 h-12 cursor-pointer hover:bg-green-500 transition transform active:scale-95"
+                                    onClick={handleAddCart}>
+                                AÑADIR AL CARRITO
+                            </button>
                             <button className="text-2xl border border-gray-400 h-12 p-2 rounded bg-gray-100 cursor-pointer"><FiHeart className="text-red-500" /></button>
                         </div>
                         <div className="bg-green-200 text-black rounded-sm p-2">
@@ -115,7 +152,7 @@ export function Product(){
                 {/**--Seccion de reseñas-- */}
                 <div className="font-body">
                     <h3>Opiniones</h3>
-                    <div className="flex gap-7">
+                    <div className="flex flex-col items-center gap-7 md:flex-row">
                         <div className="flex flex-col bg-gray-400 w-40 items-center justify-center rounded gap-3 p-5 text-black">
                             <h2 className="text-5xl font-bold">4.6</h2>
                             <div className="flex">

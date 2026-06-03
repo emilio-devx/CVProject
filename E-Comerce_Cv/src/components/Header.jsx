@@ -6,7 +6,7 @@ import { useState } from "react"
 import { HiOutlineX } from "react-icons/hi"
 import { Link } from "react-router"
 
-export function Header(){
+export function Header({ cartItems }){
     const [nameUser, setNameUser] = useState("Mi Cuenta")
     const [accOpened, setAccOpened] = useState(false)
     const [cartOpened, setCartOpened] = useState(false)
@@ -21,6 +21,7 @@ export function Header(){
         <>
         {/**CONTENIDO DEL LOGIN */}
         {accOpened && ( // --> Renderizado condicional para el MODAL
+        
             <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50" onClick={() => setAccOpened(false)}>
                 <div className="bg-white text-black p-7 rounded-lg shadow-lg w-80 relative" onClick={(e) => e.stopPropagation()}>
                   <button className="absolute top-2 right-2.5 text-2xl cursor-pointer" onClick={()=>{setAccOpened(false)}}>
@@ -74,16 +75,35 @@ export function Header(){
                     </button>
                 </div>
                 <div className="flex flex-col items-center gap-3">
-                    <img src={cartImg} alt="logo_EComerce" className="w-25 bg-amber-400 rounded-4xl p-2"/>
-                    <h3 className="font-semibold">Cesta vacía</h3>
-                    <p className="flex text-center">Explora artículos desde nuestra página principal</p>
-                    <Link to="/" className="border p-2 rounded bg-amber-500 cursor-pointer hover:text-white hover:bg-amber-600 focus:ring-2 focus:ring-orange-400 transition duration-300" >
-                        Explorar artículos
-                    </Link>
+                    {cartItems.length === 0 ? (
+                        <>
+                            <img src={cartImg} alt="logo_EComerce" className="w-25 bg-amber-400 rounded-4xl p-2"/>
+                            <h3 className="font-semibold">Cesta vacía</h3>
+                            <p className="flex text-center">Explora artículos desde nuestra página principal</p>
+                            <Link to="/" className="border p-2 rounded bg-amber-500 cursor-pointer hover:text-white hover:bg-amber-600 focus:ring-2 focus:ring-orange-400 transition duration-300" >
+                                Explorar artículos
+                            </Link>
+                        </>
+                    ):
+                    (
+                        <>
+                            {cartItems.map((item,id) => (
+                                <div key={id} className="flex">
+                                    <div className="flex">
+                                        <img src={item.image} alt={item.alt} className="w-50" />
+                                    </div>
+                                    <div className="flex flex-col">
+                                        <h3>{item.name}</h3>
+                                        <button>Delete</button>
+                                    </div>
+                                </div>
+                            ))}
+                        </>
+                    )}
                 </div>
             </div>
         </div>
-        <header className="border-b p-4">
+        <header className="border-b p-4 bg-[#23272f] text-white">
                 <div className="max-w-7xl mx-auto flex items-center justify-between gap-4 lg:flex-row">
                     <div className="flex items-center gap-3" id="headLeft">
                         <Link to="/" id="logoHome">
