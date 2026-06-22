@@ -99,11 +99,10 @@ export function Home () {
                             ))
                         : productsImages.slice(0, 8).map((imgProd) => {
                             const precioBase = 89.99
-                            const precioFormateado = precioBase.toString().replace(/\./g, "'")
                             const product = {
                                 id: imgProd.id,
                                 name: "Patin Artístico",
-                                price: precioFormateado,
+                                price: 89.99,
                                 image: imgProd.src.medium,
                                 description: "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
                                 alt: imgProd.alt
@@ -164,30 +163,56 @@ export function Home () {
                             ? Array.from({ length: 4 }).map((_, index) => (
                                 <ProductCardSkeleton key={index} />
                                 ))
-                            : productsImages.slice(8,12).map((imgProd) => (
-                                <div key={imgProd.id} className="text-center sm:text-left bg-white rounded-xl overflow-hidden hover:cursor-pointer hover:bg-amber-300 transition duration-400">
-                                    <div className="h-32 sm:h-48">
-                                        <img src={imgProd.src.medium} alt={imgProd.alt} loading="lazy" className="w-full h-full object-cover"/> 
-                                    </div>
-                                    <div className="p-5 flex flex-col gap-2 text-black">
-                                        <h3 className="font-body text-xl font-semibold">Patín Agresivo</h3>
-                                        <p className="font-body text-gray-700 hidden sm:block">Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
-                                        <h2 className="font-body text-lg sm:text-2xl font-bold">89'99€</h2>
-                                        <span className="flex flex-col sm:flex-row items-center">
-                                            <span className="flex gap-1 font-body">
-                                                <h3>
-                                                    <b>8/10 </b>
-                                                </h3>
-                                                <h3 className="hidden sm:block">·</h3>
-                                            </span>
-                                            <span className="flex items-center">
-                                                <img src={star} alt="star" className="w-5 h-full"/>
-                                                <h3 className="font-body cursor-pointer hover:underline">1000 reseñas</h3>
-                                            </span>
-                                        </span>
-                                    </div>
-                                </div>
-                            ))}
+                            : productsImages.slice(8,12).map((imgProd) => {
+                                const product = {
+                                id: imgProd.id,
+                                name: "Patin Agresivo",
+                                price: 129.99,
+                                image: imgProd.src.medium,
+                                description: "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
+                                alt: imgProd.alt
+                                }
+                                if (!product) {
+                                    return (
+                                      <div className=" bg-[#23272f] text-white flex items-center justify-center pt-30">
+                                        <div className="flex flex-col gap-3 text-center">
+                                          <h1 className="text-3xl font-bold">Producto no encontrado</h1>
+                                          <Link to="/" className="hover:underline text-amber-300">
+                                            Volver al inicio
+                                          </Link>
+                                        </div>
+                                      </div>
+                                    )
+                                }
+                                return (
+                                    <Link key={product.id}
+                                        to="/Product"
+                                        state={{ product }}>
+                                        <div key={imgProd.id} className="text-center sm:text-left bg-white rounded-xl overflow-hidden hover:cursor-pointer hover:bg-amber-300 transition duration-400">
+                                            <div className="h-32 sm:h-48">
+                                                <img src={imgProd.src.medium} alt={imgProd.alt} loading="lazy" className="w-full h-full object-cover"/> 
+                                            </div>
+                                            <div className="p-5 flex flex-col gap-2 text-black">
+                                                <h3 className="font-body text-xl font-semibold">Patín Agresivo</h3>
+                                                <p className="font-body text-gray-700 hidden sm:block">Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+                                                <h2 className="font-body text-lg sm:text-2xl font-bold">129'99€</h2>
+                                                <span className="flex flex-col sm:flex-row items-center">
+                                                    <span className="flex gap-1 font-body">
+                                                        <h3>
+                                                            <b>8/10 </b>
+                                                        </h3>
+                                                        <h3 className="hidden sm:block">·</h3>
+                                                    </span>
+                                                    <span className="flex items-center">
+                                                        <img src={star} alt="star" className="w-5 h-full"/>
+                                                        <h3 className="font-body cursor-pointer hover:underline">1000 reseñas</h3>
+                                                    </span>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </Link>
+                                )
+                            })}
                         </div>
                     </div>
                 </div>
@@ -251,34 +276,60 @@ export function Home () {
                                 ? Array.from({ length: 4 }).map((_, index) => (
                                     <ProductCardSkeleton key={index} />
                                     ))
-                                : productsImages.slice(12,16).map((imgProd) => (
-                                <div key={imgProd.id} className="bg-white rounded-xl overflow-hidden hover:cursor-pointer border hover:bg-amber-300 transition duration-400 relative">
-                                    <h3 className="bg-red-500 absolute font-bold font-body p-1 rounded-xl">-50%</h3>
-                                    <div className="h-32 sm:h-48">
-                                        <img src={imgProd.src.medium} loading="lazy" alt={imgProd.alt} className="w-full h-full object-cover"/> 
-                                    </div>
-                                    <div className="p-5 flex flex-col gap-2 text-black text-center sm:text-left">
-                                        <h3 className="font-body text-xl font-semibold">Patín fitness</h3>
-                                        <p className="font-body text-gray-700 hidden sm:block">Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
-                                        <span className="flex flex-col sm:flex-row items-center sm:gap-3">
-                                            <h2 className="font-body text-lg sm:text-3xl font-bold">44'99€</h2>
-                                            <h3 className="font-body text-sm sm:text-xl line-through text-gray-500">89'99€</h3>
-                                        </span>
-                                        <span className="flex flex-col sm:flex-row items-center">
-                                            <span className="flex gap-1 font-body">
-                                                <h3>
-                                                    <b>8/10 </b>
-                                                </h3>
-                                                <h3 className="hidden sm:block">·</h3>
-                                            </span>
-                                            <span className="flex items-center">
-                                                <img src={star} alt="star" className="w-5 h-full"/>
-                                                <h3 className="font-body cursor-pointer hover:underline">1000 reseñas</h3>
-                                            </span>
-                                        </span>
-                                    </div>
-                                </div>
-                            ))}
+                                : productsImages.slice(12,16).map((imgProd) => {
+                                    const product = {
+                                        id: imgProd.id,
+                                        name: "Patin Fitness",
+                                        price: 44.99,
+                                        image: imgProd.src.medium,
+                                        description: "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
+                                        alt: imgProd.alt
+                                    }
+                                    if (!product) {
+                                        return (
+                                          <div className=" bg-[#23272f] text-white flex items-center justify-center pt-30">
+                                            <div className="flex flex-col gap-3 text-center">
+                                              <h1 className="text-3xl font-bold">Producto no encontrado</h1>
+                                              <Link to="/" className="hover:underline text-amber-300">
+                                                Volver al inicio
+                                              </Link>
+                                            </div>
+                                          </div>
+                                        )
+                                    }
+                                    return(
+                                        <Link key={product.id}
+                                                to="/Product"
+                                                state={{ product }}>
+                                            <div key={imgProd.id} className="bg-white rounded-xl overflow-hidden hover:cursor-pointer border hover:bg-amber-300 transition duration-400 relative">
+                                                <h3 className="bg-red-500 absolute font-bold font-body p-1 rounded-xl">-50%</h3>
+                                                <div className="h-32 sm:h-48">
+                                                    <img src={imgProd.src.medium} loading="lazy" alt={imgProd.alt} className="w-full h-full object-cover"/> 
+                                                </div>
+                                                <div className="p-5 flex flex-col gap-2 text-black text-center sm:text-left">
+                                                    <h3 className="font-body text-xl font-semibold">Patín fitness</h3>
+                                                    <p className="font-body text-gray-700 hidden sm:block">Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+                                                    <span className="flex flex-col sm:flex-row items-center sm:gap-3">
+                                                        <h2 className="font-body text-lg sm:text-3xl font-bold">44'99€</h2>
+                                                        <h3 className="font-body text-sm sm:text-xl line-through text-gray-500">89'99€</h3>
+                                                    </span>
+                                                    <span className="flex flex-col sm:flex-row items-center">
+                                                        <span className="flex gap-1 font-body">
+                                                            <h3>
+                                                                <b>8/10 </b>
+                                                            </h3>
+                                                            <h3 className="hidden sm:block">·</h3>
+                                                        </span>
+                                                        <span className="flex items-center">
+                                                            <img src={star} alt="star" className="w-5 h-full"/>
+                                                            <h3 className="font-body cursor-pointer hover:underline">1000 reseñas</h3>
+                                                        </span>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </Link>
+                                    )
+                                })}
                         </div>
                     </div>
             </section>

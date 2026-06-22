@@ -1,4 +1,5 @@
-import { FiSearch, FiMenu, FiShoppingCart, FiUser, FiLock } from "react-icons/fi"
+import { FiSearch, FiMenu, FiShoppingCart, FiUser, FiLock, FiPlus, FiMinus } from "react-icons/fi"
+import { FaTrashAlt } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc"
 import logo from "/Img/LogoE-comerce.png"
 import cartImg from "/Img/carritoImg.svg"
@@ -6,17 +7,22 @@ import { useState } from "react"
 import { HiOutlineX } from "react-icons/hi"
 import { Link } from "react-router"
 
-export function Header({ cartItems }){
+export function Header({ cartItems, increaseQuantity, decreaseQuantity, removeFromCart }){
     const [nameUser, setNameUser] = useState("Mi Cuenta")
     const [accOpened, setAccOpened] = useState(false)
     const [cartOpened, setCartOpened] = useState(false)
-
     function startSesion (){
         if (usrInput == email && pswInput === password) {
             setNameUser(name)
             setAccOpened(false)
         }
     }
+
+    {/** Unidades totales de productos del carrito */}
+    const totalUnits = cartItems.reduce((total, item) => {
+        return total + item.quantity
+    }, 0)
+
     return(
         <>
         {/**CONTENIDO DEL LOGIN */}
@@ -74,30 +80,66 @@ export function Header({ cartItems }){
                         <HiOutlineX className="hover:text-red-500 hover:bg-gray-100 transition"/>
                     </button>
                 </div>
-                <div className="flex flex-col items-center gap-3">
+                <div className="flex flex-col px-5 gap-4">
                     {cartItems.length === 0 ? (
                         <>
-                            <img src={cartImg} alt="logo_EComerce" className="w-25 bg-amber-400 rounded-4xl p-2"/>
-                            <h3 className="font-semibold">Cesta vacía</h3>
-                            <p className="flex text-center">Explora artículos desde nuestra página principal</p>
-                            <Link to="/" className="border p-2 rounded bg-amber-500 cursor-pointer hover:text-white hover:bg-amber-600 focus:ring-2 focus:ring-orange-400 transition duration-300" >
-                                Explorar artículos
-                            </Link>
+                            <div className="flex flex-col items-center gap-3 text-center">
+                                <img src={cartImg} alt="logo_EComerce" className="w-25 bg-amber-400 rounded-4xl p-2"/>
+                                <h3 className="font-semibold">Cesta vacía</h3>
+                                <p className="flex text-center">Explora artículos desde nuestra página principal</p>
+                                <Link to="/" className="border p-2 rounded bg-amber-500 cursor-pointer hover:text-white hover:bg-amber-600 focus:ring-2 focus:ring-orange-400 transition duration-300" >
+                                    Explorar artículos
+                                </Link>
+                            </div>
                         </>
                     ):
                     (
                         <>
-                            {cartItems.map((item,id) => (
-                                <div key={id} className="flex">
-                                    <div className="flex">
-                                        <img src={item.image} alt={item.alt} className="w-50" />
+                            {cartItems.map((item) => (
+                                <div key={`${item.id}-${item.size}`} className="w-full flex gap-4 border-b border-gray-200 pb-4">
+                                    <div className="w-30 aspect-square overflow-hidden">
+                                        <img src={item.image} alt={item.alt} className="w-full h-full object-cover" />
                                     </div>
-                                    <div className="flex flex-col">
-                                        <h3>{item.name}</h3>
-                                        <button>Delete</button>
+                                    <div className="flex flex-1 flex-col gap-2">
+                                        <div className="flex justify-between">
+                                            <h3 className="font-semibold">{item.name}</h3>
+                                            <FaTrashAlt className="text-l cursor-pointer transform active:scale-80 transition-transform" 
+                                                        onClick={() => removeFromCart(item.id, item.size)}/>
+                                        </div>
+                                        <h3>Talla: {item.size}</h3>
+                                        <h3>Unidades: </h3>
+                                        <div className="flex items-center gap-3">
+                                            <div className="flex items-center gap-2 border border-gray-200 rounded-sm w-30 h-10 justify-between px-3 p-1">
+                                                <button className="flex cursor-pointer justify-center items-center active:scale-80 transition-transform shadow-sm text-gray-200"
+                                                        onClick={() => decreaseQuantity(item.id, item.size)}><FiMinus /></button>
+                                                <span className="select-none">{item.quantity}</span>
+                                                <button className="flex cursor-pointer justify-center items-center transform active:scale-80 transition-transform shadow-sm text-gray-200"
+                                                        onClick={() => increaseQuantity(item.id, item.size)}><FiPlus /></button>
+                                            </div>
+                                            
+                                        </div>
+                                        <div className="flex justify-between">
+                                            <h3>Precio/unidad: </h3>
+                                            <h3>{Math.trunc((item.price * item.quantity) * 100) / 100}€</h3>
+                                        </div>
                                     </div>
                                 </div>
+                                
                             ))}
+                            {/**--TOTAL PRECIO-- */}
+                            <div className="flex w-full flex-col ">
+                                <div className="flex justify-around">
+                                    <h3 className="">Unidades</h3>
+                                    <h3>{totalUnits}</h3>
+                                </div>
+                                <div className="flex justify-around">
+                                    <h3 className="text-start">TOTAL (IVA incluido): </h3>
+                                    <h3 className="text-2xl">89,99€</h3>
+                                </div>
+                            </div>
+                            <button className="w-full bg-amber-600 text-white rounded-md py-3 font-semibold hover:bg-green-500 transition cursor-pointer transform active:scale-97 ">
+          Finalizar compra
+        </button>
                         </>
                     )}
                 </div>
@@ -127,7 +169,7 @@ export function Header({ cartItems }){
                         <div className="flex items-center gap-3 cursor-pointer p-3 rounded hover:bg-gray-600 transition" onClick={() => setCartOpened(true)}>
                             <div className="relative">
                                 <FiShoppingCart className="text-xl" />
-                                <span id="cartArticlesNum" className="absolute -top-2 -right-2 bg-red-500 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">0</span>
+                                <span id="cartArticlesNum" className="absolute -top-2 -right-2 bg-red-500 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">{totalUnits}</span>
                             </div>
                             <h3 className="hidden md:block">Mi cesta</h3>
                         </div>
