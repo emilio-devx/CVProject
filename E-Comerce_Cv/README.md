@@ -150,6 +150,7 @@ vercel dev
 
 ```md
 El proyecto se ejecuta con `vercel dev` para poder probar también las funciones serverless de la carpeta `/api`, como el endpoint `/api/pexels`.
+```
 
 ## 🔐 Variables de entorno
 
