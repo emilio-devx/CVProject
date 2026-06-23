@@ -7,15 +7,18 @@ import { Header } from "./components/Header.jsx"
 export function App(){
     const [cartItems, setCartItems] = useState([])
 
+    {/** Añadir producto al array del carrito */}
     function addToCart(productToCart){
         setCartItems((prevCart) => {
+            {/** Variable para validar si existe en el carrito */}
             const productExists = prevCart.find((item) => {
                 return item.id === productToCart.id && item.size === productToCart.size
             })
 
+            /** Si coincide se aumenta el valor de los productos actuales con los anteriores */
             if (productExists) {
                 return prevCart.map((item) => {
-                    if (item.id === productToCart.id && item.size === productToCart.size) {
+                    if (item.id === productToCart.id && item.size === productToCart.size) { /** Si coincide la ID del prod Y la MEDIDA */
                         return {
                             ...item,
                             quantity: item.quantity + productToCart.quantity

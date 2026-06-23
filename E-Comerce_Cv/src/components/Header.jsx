@@ -23,6 +23,11 @@ export function Header({ cartItems, increaseQuantity, decreaseQuantity, removeFr
         return total + item.quantity
     }, 0)
 
+    const totalPrice = cartItems.reduce((total, item) => {
+        return total + (item.price * item.quantity)
+    }, 0)
+
+
     return(
         <>
         {/**CONTENIDO DEL LOGIN */}
@@ -71,7 +76,7 @@ export function Header({ cartItems, increaseQuantity, decreaseQuantity, removeFr
                   cartOpened ? "opacity-100" : "opacity-0 pointer-events-none"
                 }`}
                 onClick={() => setCartOpened(false)}>
-            <div className={`absolute top-0 right-0 h-screen w-full sm:w-100 bg-white text-black shadow-lg transform transition-transform duration-300 ${
+            <div className={`absolute top-0 right-0 h-screen w-full sm:w-100 bg-white text-black shadow-lg transform transition-transform duration-300 select-none${
                       cartOpened ? "translate-x-0" : "translate-x-full"
                     }`}onClick={(e) => e.stopPropagation()}>
                 <div className="flex items-center justify-between border-b pb-3 mb-3 p-5">
@@ -80,7 +85,7 @@ export function Header({ cartItems, increaseQuantity, decreaseQuantity, removeFr
                         <HiOutlineX className="hover:text-red-500 hover:bg-gray-100 transition"/>
                     </button>
                 </div>
-                <div className="flex flex-col px-5 gap-4">
+                <div className="flex flex-col px-5 gap-4 select-none">
                     {cartItems.length === 0 ? (
                         <>
                             <div className="flex flex-col items-center gap-3 text-center">
@@ -96,7 +101,7 @@ export function Header({ cartItems, increaseQuantity, decreaseQuantity, removeFr
                     (
                         <>
                             {cartItems.map((item) => (
-                                <div key={`${item.id}-${item.size}`} className="w-full flex gap-4 border-b border-gray-200 pb-4">
+                                <div key={`${item.id}-${item.size}`} className="w-full flex gap-4 border-b border-gray-200 pb-4 font-body">
                                     <div className="w-30 aspect-square overflow-hidden">
                                         <img src={item.image} alt={item.alt} className="w-full h-full object-cover" />
                                     </div>
@@ -106,7 +111,7 @@ export function Header({ cartItems, increaseQuantity, decreaseQuantity, removeFr
                                             <FaTrashAlt className="text-l cursor-pointer transform active:scale-80 transition-transform" 
                                                         onClick={() => removeFromCart(item.id, item.size)}/>
                                         </div>
-                                        <h3>Talla: {item.size}</h3>
+                                        <h3>TALLA: {item.size}</h3>
                                         <h3>Unidades: </h3>
                                         <div className="flex items-center gap-3">
                                             <div className="flex items-center gap-2 border border-gray-200 rounded-sm w-30 h-10 justify-between px-3 p-1">
@@ -116,10 +121,9 @@ export function Header({ cartItems, increaseQuantity, decreaseQuantity, removeFr
                                                 <button className="flex cursor-pointer justify-center items-center transform active:scale-80 transition-transform shadow-sm text-gray-200"
                                                         onClick={() => increaseQuantity(item.id, item.size)}><FiPlus /></button>
                                             </div>
-                                            
                                         </div>
                                         <div className="flex justify-between">
-                                            <h3>Precio/unidad: </h3>
+                                            <h3>Subtotal:</h3>
                                             <h3>{Math.trunc((item.price * item.quantity) * 100) / 100}€</h3>
                                         </div>
                                     </div>
@@ -133,8 +137,8 @@ export function Header({ cartItems, increaseQuantity, decreaseQuantity, removeFr
                                     <h3>{totalUnits}</h3>
                                 </div>
                                 <div className="flex justify-around">
-                                    <h3 className="text-start">TOTAL (IVA incluido): </h3>
-                                    <h3 className="text-2xl">89,99€</h3>
+                                    <h3 className="flex text-left">TOTAL (IVA incluido): </h3>
+                                    <h3 className="text-2xl">{totalPrice.toFixed(2)}€</h3>
                                 </div>
                             </div>
                             <button className="w-full bg-amber-600 text-white rounded-md py-3 font-semibold hover:bg-green-500 transition cursor-pointer transform active:scale-97 ">
@@ -145,7 +149,7 @@ export function Header({ cartItems, increaseQuantity, decreaseQuantity, removeFr
                 </div>
             </div>
         </div>
-        <header className="border-b p-4 bg-[#23272f] text-white">
+        <header className="border-b p-4 bg-[#23272f] text-white select-none">
                 <div className="max-w-7xl mx-auto flex items-center justify-between gap-4 lg:flex-row">
                     <div className="flex items-center gap-3" id="headLeft">
                         <Link to="/" id="logoHome">

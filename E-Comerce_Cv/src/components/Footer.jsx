@@ -4,7 +4,7 @@ import { IoIosArrowRoundUp } from "react-icons/io"
 
 export function Footer(){
     return(
-        <footer className="bg-[#17191a] font-body mt-10">
+        <footer className="bg-[#17191a] font-body mt-10 select-none">
                 <div className="w-full max-w-7xl mx-auto items-center py-8">
                     <div id="footerSuperior" className="flex flex-col gap-8 lg:flex-row mt-5 justify-between items-center md:px-5">
                         <div className="flex flex-col gap-5 max-w-80 text-center lg:text-left">

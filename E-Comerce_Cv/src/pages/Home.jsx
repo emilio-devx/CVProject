@@ -72,7 +72,7 @@ export function Home () {
 
     
     return (
-        <div className="min-h-screen bg-[#23272f] text-white">
+        <div className="min-h-screen bg-[#23272f] text-white select-none">
             <section>
                 {/**Contenido del Hero */}
                 <div className="overflow-hidden relative w-full h-90 md:h-[450px] xl:h-[600px]">

@@ -24,8 +24,6 @@ export function Product({ addToCart }){
     const [combineProd, setCombineProd] = useState([])
 
 
-    
-
     useEffect(() => {
             async function loadProductImages() {
                 try {

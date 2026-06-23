@@ -1,102 +1,199 @@
-# E-Commerce CV
+# Prime Roller Skates 🛼
 
-Proyecto de portfolio orientado a una candidatura frontend, centrado en la construccion de una home de e-commerce de patines con React y Tailwind CSS.
+E-commerce de patines en línea desarrollado con React, Tailwind CSS y Vite.
+El proyecto simula una tienda online con productos, página individual de producto, carrito lateral, selección de talla, contador de unidades y consumo de imágenes desde la API de Pexels.
 
-## Sobre el proyecto
+## 🚀 Demo
 
-Esta aplicacion forma parte de mi proceso de aprendizaje en React. El objetivo no es solo replicar una interfaz visual atractiva, sino practicar conceptos reales de frontend como:
+🔗 Deploy: https://prime-roller-skates.vercel.app
 
-- consumo de APIs con `fetch`
-- gestion de estado con `useState`
-- efectos secundarios con `useEffect`
-- composicion de layouts con Tailwind CSS
-- integracion entre cliente React y servidor Express
+## 📸 Vista previa
+![Vista previa de Prime Roller Skates](imagenVistaPrevia.png)
 
-Actualmente la portada incluye un hero con carrusel de imagenes dinamicas obtenido desde Pexels a traves de un backend propio en Express.
+## 🧠 Sobre el proyecto
 
-## Stack
+Prime Roller Skates es un proyecto personal creado para practicar el desarrollo frontend moderno con React.  
+La idea principal es construir una experiencia parecida a una tienda online real, trabajando conceptos como componentes reutilizables, rutas, estado compartido, consumo de API y lógica de carrito.
 
-- React 19
+El proyecto está enfocado en aprender y demostrar habilidades de desarrollo web, especialmente en React y Tailwind CSS.
+
+## 🛠️ Tecnologías utilizadas
+
+- React
 - Vite
-- Tailwind CSS 4
+- Tailwind CSS
+- React Router
 - React Icons
-- Express
-- Node Fetch
+- JavaScript
 - Pexels API
+- Vercel CLI
+- pnpm
+
+## ✨ Funcionalidades
+
+- Visualización de productos en la Home.
+- Página individual de producto.
+- Selección de talla.
+- Selección de cantidad.
+- Carrito lateral desplegable.
+- Agrupación de productos repetidos por `id` y `size`.
+- Eliminación de productos del carrito.
+- Cálculo de unidades totales y precio total.
+- Modal visual de inicio de sesión.
+- Diseño responsive.
 
 ## Estructura
-
 ```text
 E-Comerce_Cv/
-  src/       -> interfaz en React
-  public/    -> recursos publicos
-  server/    -> backend Express para consultar la API de Pexels
+├── api/
+│   └── pexels.js
+├── src/
+│   ├── components/
+│   │   ├── Header.jsx
+│   │   ├── Footer.jsx
+│   │   ├── ProductCardSkeleton.jsx
+│   │   └── CategoryGridSkeleton.jsx
+│   ├── pages/
+│   │   ├── Home.jsx
+│   │   └── Product.jsx
+│   ├── App.jsx
+│   └── main.jsx
+├── package.json
+└── README.md
 ```
 
-## Funcionalidades actuales
+## 🧩 Conceptos trabajados
 
-- Header responsive con buscador, acceso a cuenta y cesta
-- Modal de inicio de sesion
-- Panel lateral para la cesta
-- Hero principal con carrusel automatico
-- Navegacion manual del carrusel con flechas
-- Carga dinamica de imagenes desde el servidor local
-- Grid inicial de productos para seguir construyendo la portada
+Durante el desarrollo de este proyecto he practicado:
 
-## Proximos pasos
+- Componentes reutilizables en React.
+- Paso de props entre componentes.
+- Estado compartido entre páginas.
+- Manejo de arrays de objetos.
+- Métodos como `map`, `find`, `filter` y `reduce`.
+- Renderizado condicional.
+- Formularios y eventos.
+- Rutas con React Router.
+- Consumo de APIs externas.
+- Organización de carpetas en un proyecto React.
+- Diseño responsive con Tailwind CSS.
+- Deploy de una app React en Vercel.
 
-- completar las cards de producto con datos mas realistas
-- mejorar la composicion visual estilo landing de e-commerce
-- anadir valoraciones, precios y llamadas a la accion
-- conectar mejor la zona de productos con una logica de catálogo
-- reforzar la adaptacion a movil (responsive)
+## 🛒 Lógica del carrito
 
-## Instalacion
+El carrito está gestionado desde un componente padre para que pueda compartirse entre diferentes páginas y componentes.
+La lógica permite:
 
-### 1. Instalar dependencias del frontend
+- Añadir productos desde la página de producto.
+- Agrupar productos iguales por `id` y `size`.
+- Crear una nueva línea si el producto tiene una talla diferente.
+- Aumentar o disminuir unidades desde el carrito.
+- Eliminar productos.
+- Calcular el total de unidades.
+- Calcular el precio total con `reduce`.
+
+Ejemplo de estructura de un producto dentro del carrito:
+
+```javascript
+{
+  id: 123,
+  name: "Patín Artístico",
+  price: 89.99,
+  image: "...",
+  quantity: 2,
+  size: 40
+}
+```
+## 🌐 API
+
+El proyecto utiliza la API de Pexels para cargar imágenes dinámicas de productos y secciones visuales.
+Las llamadas a la API están gestionadas desde una función serverless en Vercel:
+
+```text
+/api/pexels
+```
+
+La API devuelve datos para:
+
+- Hero images
+- Productos principales
+- Cascos
+- Protecciones
+- Ruedas
+- Productos combinables
+
+## ⚙️ Instalación y ejecución local
+
+### 1. Clona el repositorio:
 
 ```bash
-npm install
+git clone https://github.com/emilio-devx/CVProject.git
 ```
 
-### 2. Instalar dependencias del servidor
+### 2. Entra en la carpeta del proyecto:
 
 ```bash
-cd server
-npm install
+cd CVProject/E-Comerce_Cv
 ```
 
-### 3. Configurar variables de entorno
+### 3. Instala dependencias:
 
-Dentro de `server/` crea un archivo `.env` con tu clave de Pexels:
+```bash
+pnpm install
+```
+
+### 4. Ejecuta el proyecto:
+
+```bash
+vercel dev
+```
+
+```md
+El proyecto se ejecuta con `vercel dev` para poder probar también las funciones serverless de la carpeta `/api`, como el endpoint `/api/pexels`.
+
+## 🔐 Variables de entorno
+
+Para que la API de Pexels funcione, necesitas crear un archivo `.env` con tu clave:
 
 ```env
 PEXELS_API_KEY=tu_api_key
 ```
 
-### 4. Iniciar el servidor
+En Vercel, esta variable debe configurarse desde el panel de Environment Variables.
 
-```bash
-cd server
-node index.js
-```
+## 🚧 Dificultades y aprendizajes
 
-### 5. Iniciar el frontend
+Durante el desarrollo me encontré con varios retos técnicos:
 
-```bash
-npm run dev
-```
+- Migrar parte de la lógica backend a funciones serverless de Vercel.
+- Entender cómo compartir el estado del carrito entre páginas.
+- Evitar que productos repetidos se dupliquen en el carrito.
+- Manejar rutas y datos entre Home.jsx y Product.jsx.
+- Mejorar la estructura visual del carrito lateral.
+- Trabajar con datos dinámicos provenientes de una API externa.
+- Calcular correctamente unidades totales y precio total del carrito.
 
-## Aprendizajes
+Estos problemas me ayudaron a entender mejor cómo se estructura una aplicación React más realista.
 
-Este proyecto me esta sirviendo para practicar de forma aplicada:
+## 🔜 Mejoras futuras
+- Sustituir datos simulados por productos reales desde una base de datos.
+- Añadir buscador funcional.
+- Añadir filtros por categoría.
+- Guardar el carrito en `localStorage`.
+- Crear rutas dinámicas tipo `/product/:id`.
+- Mejorar el sistema de login.
+- Crear una página de checkout.
+- Mejorar accesibilidad.
+- Mejorar responsive en pantallas pequeñas.
 
-- diferencia entre `async`, `await` y promesas
-- consumo de endpoints desde React
-- separacion entre frontend y backend
-- renderizado de listas con `.map()`
-- composicion de carruseles y layouts complejos en Tailwind
+## 👨‍💻 Autor
+
+Desarrollado por Emilio Haro.
+
+- GitHub: https://github.com/emilio-devx
+- Deploy: https://prime-roller-skates.vercel.app
 
 ## Estado
 
-Proyecto en desarrollo. Lo uso como pieza de portfolio y como entorno de practica para afianzar React, Tailwind y consumo de APIs.
+Proyecto en desarrollo.
+Lo uso como pieza de portfolio y como entorno de práctica para afianzar React, Tailwind, consumo de APIs y lógica de estado en React.
